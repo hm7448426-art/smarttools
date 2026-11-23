@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="SmartTools AI - Free online productivity and text tools.">
+<title>SmartTools AI - Free Online Tools</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#090b10;color:#fff}
+header{padding:22px 7%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #252936}
+.logo{font-size:23px;font-weight:bold;color:#a78bfa}
+nav a{color:#ccc;text-decoration:none;margin-left:18px;font-size:14px}
+.hero{text-align:center;padding:75px 20px 55px}
+.hero h1{font-size:clamp(34px,7vw,55px);margin-bottom:18px}
+.hero h1 span{color:#a78bfa}
+.hero p{color:#a3a8b5;line-height:1.7;max-width:600px;margin:auto}
+.search{margin:28px auto;max-width:500px}
+.search input{width:100%;padding:15px;background:#151925;border:1px solid #30364a;border-radius:12px;color:white;font-size:15px}
+.container{max-width:1050px;margin:auto;padding:20px}
+.section-title{margin:20px 0 25px;font-size:25px}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card{background:#131722;border:1px solid #272e40;border-radius:15px;padding:22px;transition:.2s}
+.card:hover{border-color:#9271ed;transform:translateY(-3px)}
+.card .emoji{font-size:30px;margin-bottom:15px}
+.card h3{margin-bottom:9px}
+.card p{color:#9da5b5;font-size:13px;line-height:1.6}
+.card button,.action{background:#8061db;color:white;border:0;border-radius:8px;padding:11px 16px;margin-top:17px;cursor:pointer}
+.workspace{display:none;margin:35px auto;background:#131722;border:1px solid #30364a;border-radius:15px;padding:22px;max-width:750px}
+.workspace textarea,.workspace input{width:100%;background:#090d16;color:white;border:1px solid #343b4c;padding:14px;border-radius:9px;margin:12px 0;font-size:15px}
+.workspace textarea{min-height:130px;resize:vertical}
+.workspace button{margin:5px 5px 5px 0}
+.result{color:#a78bfa;margin-top:12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.close{float:right;background:#30364a;color:white;border:0;padding:8px 12px;border-radius:7px}
+footer{text-align:center;padding:35px 15px;margin-top:65px;border-top:1px solid #252936;color:#9299a8;font-size:13px;line-height:2}
+footer a{color:#a78bfa;text-decoration:none;margin:0 8px}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">✦ SmartTools AI</div>
+<nav><a href="#tools">Tools</a><a href="#about">About</a></nav>
+</header>
+
+<section class="hero">
+<h1>All Your Tools.<br><span>One Smart Place.</span></h1>
+<p>Discover free online tools to simplify your daily work. Fast, easy and accessible from anywhere.</p>
+<div class="search">
+<input id="search" placeholder="Search your favourite tools..." oninput="filterTools()">
+</div>
+</section>
+
+<main class="container" id="tools">
+<h2 class="section-title">Explore Our Tools</h2>
+<div class="tools" id="toolGrid">
+<div class="card" data-name="word counter">
+<div class="emoji">📝</div><h3>Word Counter</h3>
+<p>Count words, characters and sentences instantly.</p>
+<button onclick="openTool('words')">Use Tool →</button>
+</div>
+<div class="card" data-name="case converter">
+<div class="emoji">🔠</div><h3>Case Converter</h3>
+<p>Convert text to uppercase, lowercase and more.</p>
+<button onclick="openTool('case')">Use Tool →</button>
+</div>
+<div class="card" data-name="text cleaner">
+<div class="emoji">✨</div><h3>Text Cleaner</h3>
+<p>Remove extra spaces and clean your text.</p>
+<button onclick="openTool('clean')">Use Tool →</button>
+</div>
+<div class="card" data-name="json formatter">
+<div class="emoji">💻</div><h3>JSON Formatter</h3>
+<p>Format and validate JSON data easily.</p>
+<button onclick="openTool('json')">Use Tool →</button>
+</div>
+</div>
+
+<div class="workspace" id="workspace">
+<button class="close" onclick="closeTool()">✕ Close</button>
+<h2 id="toolTitle">Tool</h2>
+<textarea id="toolInput" placeholder="Enter or paste your text here..."></textarea>
+<div id="actions"></div>
+<div class="result" id="result"></div>
+</div>
+</main>
+
+<section class="container" id="about">
+<h2 class="section-title">About SmartTools AI</h2>
+<p style="color:#a3a8b5;line-height:1.8">SmartTools AI is a collection of simple online productivity tools designed to help everyone work smarter and save time.</p>
+</section>
+
+<footer>
+<strong>✦ SmartTools AI</strong><br>
+Free tools for everyone, everywhere.<br>
+<a href="#tools">Tools</a>
+<a href="mailto:contact@smarttools.example">Contact</a>
+<p>© 2026 SmartTools AI. All rights reserved.</p>
+</footer>
+
+<script>
+const input=document.getElementById('toolInput');
+const result=document.getElementById('result');
+const actions=document.getElementById('actions');
+const workspace=document.getElementById('workspace');
+
+function openTool(type){
+workspace.style.display='block';
+input.value='';
+result.textContent='';
+actions.innerHTML='';
+let buttons='';
+if(type==='words'){
+document.getElementById('toolTitle').textContent='📝 Word Counter';
+input.placeholder='Type or paste your text...';
+input.oninput=()=>{
+let t=input.value;
+result.textContent='Words: '+(t.trim()?t.trim().split(/\s+/).length:0)+'\nCharacters: '+t.length+'\nSentences: '+(t.trim()?t.split(/[.!?]+/).filter(x=>x.trim()).length:0);
+};
+input.oninput();
+}else if(type==='case'){
+document.getElementById('toolTitle').textContent='🔠 Case Converter';
+input.placeholder='Enter your text...';
+buttons='<button class="action" onclick="convertText(1)">UPPERCASE</button><button class="action" onclick="convertText(2)">lowercase</button><button class="action" onclick="convertText(3)">Title Case</button>';
+}else if(type==='clean'){
+document.getElementById('toolTitle').textContent='✨ Text Cleaner';
+input.placeholder='Paste text to clean...';
+buttons='<button class="action" onclick="cleanText()">Clean Text</button>';
+}else if(type==='json'){
+document.getElementById('toolTitle').textContent='💻 JSON Formatter';
+input.placeholder='Paste JSON data here...';
+buttons='<button class="action" onclick="formatJSON()">Format JSON</button>';
+}
+actions.innerHTML=buttons;
+workspace.scrollIntoView({behavior:'smooth'});
+}
+function convertText(type){
+let t=input.value;
+if(type===1)t=t.toUpperCase();
+if(type===2)t=t.toLowerCase();
+if(type===3)t=t.toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
+result.textContent=t;
+}
+function cleanText(){
+input.value=input.value.replace(/\s+/g,' ').trim();
+result.textContent='Your text has been cleaned!';
+}
+function formatJSON(){
+try{
+let data=JSON.parse(input.value);
+result.textContent=JSON.stringify(data,null,2);
+}catch(e){result.textContent='Invalid JSON. Please check your input.';}
+}
+function closeTool(){workspace.style.display='none';}
+function filterTools(){
+let q=document.getElementById('search').value.toLowerCase();
+document.querySelectorAll('.card').forEach(card=>{
+card.style.display=card.dataset.name.includes(q)?'block':'none';
+});
+}
+</script>
+</body>
+  </html>
+  
